@@ -349,43 +349,48 @@ input::placeholder, textarea::placeholder {
   background: #0d0d0d;
   border-radius: 16px;
   border: 1px solid #1a1a1a;
+  display: flex;
+  flex-direction: column;
   min-height: 130px;
-  display: flex;
-  align-items: flex-end;
-}
-
-.chat-input-area {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 20px 16px;
-  width: 100%;
+  position: relative;
 }
 
 .chat-input {
   flex: 1;
-  min-height: 24px;
-  padding: 6px 10px;
+  padding: 20px 16px 56px;
   font-size: 0.875rem;
   color: #fff;
-  background: #111;
-  border-radius: 10px;
-  border: 1px solid #222;
   outline: none;
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.5;
-  transition: border-color 0.2s;
-}
-
-.chat-input:focus {
-  border-color: #444;
+  cursor: text;
 }
 
 .chat-input:empty::before {
   content: attr(data-placeholder);
   color: #555;
   pointer-events: none;
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  font-size: 0.875rem;
+}
+
+.chat-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  pointer-events: none;
+}
+
+.chat-controls > * {
+  pointer-events: auto;
 }
 
 .chat-ctrl-left,

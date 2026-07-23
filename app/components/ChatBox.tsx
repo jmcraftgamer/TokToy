@@ -48,7 +48,17 @@ export default function ChatBox({ onSend }: { onSend: (text: string) => void }) 
   return (
     <div className="chat-wrapper">
       <div className="chat-box">
-        <div className="chat-input-area">
+        <div
+          ref={inputRef}
+          className="chat-input"
+          contentEditable
+          role="textbox"
+          data-placeholder="Você tem uma dúvida?"
+          onInput={(e) => setInput(e.currentTarget.textContent || '')}
+          onKeyDown={handleKeyDown}
+          suppressContentEditableWarning
+        />
+        <div className="chat-controls">
           <div className="chat-ctrl-left">
             <button className="chat-btn" title="Anexar imagem">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -62,16 +72,6 @@ export default function ChatBox({ onSend }: { onSend: (text: string) => void }) 
               </svg>
             </button>
           </div>
-          <div
-            ref={inputRef}
-            className="chat-input"
-            contentEditable
-            role="textbox"
-            data-placeholder="Você tem uma dúvida?"
-            onInput={(e) => setInput(e.currentTarget.textContent || '')}
-            onKeyDown={handleKeyDown}
-            suppressContentEditableWarning
-          />
           <div className="chat-ctrl-right">
             <button className="chat-btn" title="Ditado">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
