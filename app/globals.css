@@ -349,13 +349,17 @@ input::placeholder, textarea::placeholder {
   background: #0d0d0d;
   border-radius: 16px;
   border: 1px solid #1a1a1a;
+  min-height: 130px;
+  display: flex;
+  align-items: flex-end;
 }
 
 .chat-input-area {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 16px;
+  padding: 20px 16px;
+  width: 100%;
 }
 
 .chat-input {
