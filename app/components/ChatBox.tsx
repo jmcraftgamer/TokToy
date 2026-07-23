@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 
 const presetQuestions = [
   'Como criar um vídeo com IA?',
@@ -9,41 +9,14 @@ const presetQuestions = [
   'Quais formatos de vídeo são suportados?',
 ]
 
-interface Message {
-  role: 'user' | 'assistant'
-  text: string
-}
-
-export default function ChatBox() {
-  const [messages, setMessages] = useState<Message[]>([])
+export default function ChatBox({ onSend }: { onSend: (text: string) => void }) {
   const [input, setInput] = useState('')
-  const [showChat, setShowChat] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
-    }
-  }, [messages])
 
   function handleSend() {
     const text = input.trim()
     if (!text) return
-
-    setShowChat(true)
-    setMessages((prev) => [...prev, { role: 'user', text }])
-
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          text: `Recebi sua mensagem! Em breve implementaremos a resposta da IA para: "${text}"`,
-        },
-      ])
-    }, 800)
-
+    onSend(text)
     setInput('')
     if (inputRef.current) {
       inputRef.current.innerHTML = ''
@@ -75,34 +48,7 @@ export default function ChatBox() {
   return (
     <div className="chat-wrapper">
       <div className="chat-box">
-        <div className="chat-scroll" ref={scrollRef}>
-          {showChat && (
-            <div className="chat-messages">
-              {messages.map((msg, i) => (
-                <div key={i} className={`chat-msg ${msg.role}`}>
-                  <div className="chat-bubble">{msg.text}</div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="chat-edit-zone">
-            {!showChat && !input && (
-              <p className="chat-prompt">Você tem uma dúvida sobre nosso aplicativo?</p>
-            )}
-            <div
-              ref={inputRef}
-              className="chat-editable"
-              contentEditable
-              role="textbox"
-              onInput={(e) => setInput(e.currentTarget.textContent || '')}
-              onKeyDown={handleKeyDown}
-              suppressContentEditableWarning
-            />
-          </div>
-        </div>
-
-        <div className="chat-controls">
+        <div className="chat-input-area">
           <div className="chat-ctrl-left">
             <button className="chat-btn" title="Anexar imagem">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -116,6 +62,16 @@ export default function ChatBox() {
               </svg>
             </button>
           </div>
+          <div
+            ref={inputRef}
+            className="chat-input"
+            contentEditable
+            role="textbox"
+            data-placeholder="Você tem uma dúvida?"
+            onInput={(e) => setInput(e.currentTarget.textContent || '')}
+            onKeyDown={handleKeyDown}
+            suppressContentEditableWarning
+          />
           <div className="chat-ctrl-right">
             <button className="chat-btn" title="Ditado">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

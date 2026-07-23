@@ -1,7 +1,13 @@
 'use client'
 
+import { useState } from 'react'
 import ChatBox from '../components/ChatBox'
 import FeatureCard from '../components/FeatureCard'
+
+interface Message {
+  role: 'user' | 'assistant'
+  text: string
+}
 
 const features = [
   {
@@ -47,15 +53,45 @@ const features = [
 ]
 
 export default function HomePage() {
+  const [messages, setMessages] = useState<Message[]>([])
+  const [showChat, setShowChat] = useState(false)
+
+  function handleSend(text: string) {
+    setShowChat(true)
+    setMessages((prev) => [...prev, { role: 'user', text }])
+
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          text: `Recebi sua mensagem! Em breve implementaremos a resposta da IA para: "${text}"`,
+        },
+      ])
+    }, 800)
+  }
+
   return (
     <div className="home-page">
-      <div className="hero-section">
-        <h1 className="hero-logo">TokToy</h1>
-        <p className="hero-subtitle">A melhor agência de <span className="hero-highlight">IAs</span></p>
+      <div className="hero-area">
+        {!showChat ? (
+          <div className="hero-section">
+            <h1 className="hero-logo">TokToy</h1>
+            <p className="hero-subtitle">A melhor agência de <span className="hero-highlight">IAs</span></p>
+          </div>
+        ) : (
+          <div className="messages-area">
+            {messages.map((msg, i) => (
+              <div key={i} className={`msg-row ${msg.role}`}>
+                <div className="msg-bubble">{msg.text}</div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="home-chat">
-        <ChatBox />
+        <ChatBox onSend={handleSend} />
       </div>
 
       <div className="features-section">

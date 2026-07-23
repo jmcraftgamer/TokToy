@@ -254,9 +254,17 @@ input::placeholder, textarea::placeholder {
   margin: 0 auto;
 }
 
+/* Hero & Messages area (shared space) */
+.hero-area {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .hero-section {
   text-align: center;
-  padding: 24px 0 28px;
+  padding: 20px 0 24px;
 }
 
 .hero-logo {
@@ -284,6 +292,48 @@ input::placeholder, textarea::placeholder {
   color: #ccc;
 }
 
+.messages-area {
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 0;
+}
+
+.msg-row {
+  display: flex;
+}
+
+.msg-row.user {
+  justify-content: flex-end;
+}
+
+.msg-row.assistant {
+  justify-content: flex-start;
+}
+
+.msg-bubble {
+  max-width: 70%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.msg-row.user .msg-bubble {
+  background: #1a1a1a;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-row.assistant .msg-bubble {
+  background: #111;
+  color: #bbb;
+  border-bottom-left-radius: 4px;
+}
+
 /* Chat */
 .home-chat {
   margin-bottom: 40px;
@@ -299,100 +349,39 @@ input::placeholder, textarea::placeholder {
   background: #0d0d0d;
   border-radius: 16px;
   border: 1px solid #1a1a1a;
-  display: flex;
-  flex-direction: column;
-  min-height: 140px;
-  position: relative;
 }
 
-.chat-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px 20px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 80px;
-  max-height: 320px;
-}
-
-.chat-messages {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.chat-msg {
-  display: flex;
-}
-
-.chat-msg.user {
-  justify-content: flex-end;
-}
-
-.chat-msg.assistant {
-  justify-content: flex-start;
-}
-
-.chat-bubble {
-  max-width: 80%;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
-.chat-msg.user .chat-bubble {
-  background: #1a1a1a;
-  color: #fff;
-  border-bottom-right-radius: 4px;
-}
-
-.chat-msg.assistant .chat-bubble {
-  background: #111;
-  color: #bbb;
-  border-bottom-left-radius: 4px;
-}
-
-.chat-edit-zone {
-  position: relative;
-  min-height: 28px;
-}
-
-.chat-prompt {
-  position: absolute;
-  inset: 0;
+.chat-input-area {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  color: #666;
-  font-weight: 400;
-  pointer-events: none;
-  text-align: center;
-  padding: 0 20px;
+  gap: 8px;
+  padding: 14px 16px;
 }
 
-.chat-editable {
-  min-height: 28px;
-  padding: 2px 0;
+.chat-input {
+  flex: 1;
+  min-height: 24px;
+  padding: 6px 10px;
   font-size: 0.875rem;
   color: #fff;
+  background: #111;
+  border-radius: 10px;
+  border: 1px solid #222;
   outline: none;
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.5;
+  transition: border-color 0.2s;
 }
 
-.chat-editable:empty::before {
-  content: '';
+.chat-input:focus {
+  border-color: #444;
 }
 
-.chat-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 16px 16px;
+.chat-input:empty::before {
+  content: attr(data-placeholder);
+  color: #555;
+  pointer-events: none;
 }
 
 .chat-ctrl-left,
@@ -410,6 +399,7 @@ input::placeholder, textarea::placeholder {
   border-radius: 8px;
   color: #555;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .chat-btn:hover {
@@ -427,6 +417,7 @@ input::placeholder, textarea::placeholder {
   color: #fff;
   background: #1a1a1a;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .chat-send:hover {
