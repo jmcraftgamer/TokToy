@@ -51,7 +51,7 @@ export default function HomePage() {
     <div className="home-page">
       <div className="hero-section">
         <h1 className="hero-logo">TokToy</h1>
-        <p className="hero-subtitle">A melhor agência de IAs</p>
+        <p className="hero-subtitle">A melhor agência de <span className="hero-highlight">IAs</span></p>
       </div>
 
       <div className="home-chat">
