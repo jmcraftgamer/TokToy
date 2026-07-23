@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'TokToyIA',
-  description: 'TokToyIA - Criação de conteúdo com IA',
+  description: 'TokToyIA - A melhor agência de IAs',
 }
 
 export default function RootLayout({
