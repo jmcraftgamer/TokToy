@@ -739,23 +739,29 @@ input::placeholder, textarea::placeholder {
 
 /* More scattered presets on create-video page */
 .cv-init-chat .chat-presets {
-  gap: 12px 16px;
+  gap: 10px 14px;
   justify-content: flex-start;
-  padding: 4px 8px;
+  padding: 4px 0 4px 24px;
+}
+
+.cv-init-chat .preset-btn:nth-child(1) {
+  transform: translateY(-2px);
+  margin-right: 8px;
 }
 
 .cv-init-chat .preset-btn:nth-child(2) {
-  margin-top: 6px;
+  transform: translateY(6px) translateX(4px);
+  margin-right: 12px;
 }
 
 .cv-init-chat .preset-btn:nth-child(3) {
-  margin-left: 14px;
-  margin-top: 2px;
+  transform: translateY(-4px) translateX(18px);
+  margin-right: 4px;
 }
 
 .cv-init-chat .preset-btn:nth-child(4) {
-  margin-top: 8px;
-  margin-left: 6px;
+  transform: translateY(3px) translateX(10px);
+  margin-right: 16px;
 }
 
 /* Split layout after sending */
