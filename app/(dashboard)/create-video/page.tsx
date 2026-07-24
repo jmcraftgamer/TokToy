@@ -2,13 +2,6 @@
 
 import { useState, useRef, useEffect } from 'react'
 
-const presetQuestions = [
-  'Quero criar um vídeo comercial de 30 segundos',
-  'Crie um vídeo promocional para TikTok Shop',
-  'Gere um vídeo com narração sobre meu produto',
-  'Preciso de um vídeo viral para redes sociais',
-]
-
 interface Message {
   role: 'user' | 'assistant'
   text: string
@@ -47,7 +40,6 @@ export default function CreateVideoPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
   const [input, setInput] = useState('')
-  const [playing, setPlaying] = useState(false)
   const inputRef = useRef<HTMLDivElement>(null)
   const inputRef2 = useRef<HTMLDivElement>(null)
   const historyRef = useRef<HTMLDivElement>(null)
@@ -89,20 +81,6 @@ export default function CreateVideoPage() {
       e.preventDefault()
       handleSend(source)
     }
-  }
-
-  function handlePresetClick(q: string) {
-    setInput(q)
-    if (inputRef.current) {
-      inputRef.current.innerHTML = q
-      const range = document.createRange()
-      const sel = window.getSelection()
-      range.selectNodeContents(inputRef.current)
-      range.collapse(false)
-      sel?.removeAllRanges()
-      sel?.addRange(range)
-    }
-    inputRef.current?.focus()
   }
 
   const inputArea = (ref: React.RefObject<HTMLDivElement>, source: 'initial' | 'split') => (
@@ -160,11 +138,6 @@ export default function CreateVideoPage() {
 
           <div className="cv-init-chat">
             {inputArea(inputRef, 'initial')}
-            <div className="chat-presets">
-              {presetQuestions.map((q, i) => (
-                <button key={i} className="preset-btn" onClick={() => handlePresetClick(q)}>{q}</button>
-              ))}
-            </div>
           </div>
         </div>
       ) : (
@@ -186,52 +159,20 @@ export default function CreateVideoPage() {
           </div>
 
           <div className="cv-right">
-            <div className="cv-player">
-              <div className="player-screen" onClick={() => setPlaying(!playing)}>
-                {!playing ? (
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <polygon points="10 8 16 12 10 16 10 8" fill="#555" stroke="none" />
-                  </svg>
-                ) : (
-                  <div className="player-placeholder">Preview do vídeo</div>
-                )}
-              </div>
-              <div className="player-timeline">
-                <div className="player-controls">
-                  <button className="player-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="19 20 9 12 19 4 19 20" /><line x1="5" y1="19" x2="5" y2="5" /></svg>
-                  </button>
-                  <button className="player-btn play-btn" onClick={() => setPlaying(!playing)}>
-                    {playing ? (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
-                    ) : (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-                    )}
-                  </button>
-                  <button className="player-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="5 4 15 12 5 20 5 4" /><line x1="19" y1="5" x2="19" y2="19" /></svg>
-                  </button>
-                </div>
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '35%' }} />
-                  <div className="progress-thumb" style={{ left: '35%' }} />
-                </div>
-                <span className="time-display">0:11 / 0:30</span>
-              </div>
-            </div>
-
             <div className="cv-video-list">
               <h3 className="cv-vlist-title">Histórico de vídeos</h3>
               {mockVideos.map((v, i) => (
                 <div key={i} className="vid-item">
-                  <div className="vid-thumb">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                  <div className="vid-frame">
+                    <div className="vid-frame-bg">
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3" />
+                      </svg>
+                    </div>
+                    <span className="vid-frame-dur">{v.duration}</span>
                   </div>
-                  <div className="vid-info">
-                    <span className="vid-name">{v.name}</span>
-                    <span className="vid-meta">{v.duration} · {v.date}</span>
-                  </div>
+                  <span className="vid-name">{v.name}</span>
+                  <span className="vid-meta">{v.date}</span>
                 </div>
               ))}
             </div>
