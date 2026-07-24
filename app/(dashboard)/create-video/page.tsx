@@ -21,12 +21,35 @@ const mockVideos = [
   { name: 'Unboxing Produto Y', duration: '1:00', date: '3 dias' },
 ]
 
+function RefBlock() {
+  return (
+    <div className="cv-ref-block">
+      <div className="ref-icon-area">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <polyline points="21 15 16 10 5 21" />
+        </svg>
+        <span className="ref-badge">+</span>
+      </div>
+      <span className="ref-label">Referências</span>
+    </div>
+  )
+}
+
+function Avatar({ name }: { name: string }) {
+  return (
+    <div className="msg-avatar">{name.charAt(0).toUpperCase()}</div>
+  )
+}
+
 export default function CreateVideoPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
   const [input, setInput] = useState('')
   const [playing, setPlaying] = useState(false)
   const inputRef = useRef<HTMLDivElement>(null)
+  const inputRef2 = useRef<HTMLDivElement>(null)
   const historyRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -35,7 +58,8 @@ export default function CreateVideoPage() {
     }
   }, [messages])
 
-  function handleSend() {
+  function handleSend(source: 'initial' | 'split') {
+    const ref = source === 'initial' ? inputRef : inputRef2
     const text = input.trim()
     if (!text) return
 
@@ -53,13 +77,17 @@ export default function CreateVideoPage() {
     }, 800)
 
     setInput('')
-    if (inputRef.current) inputRef.current.innerHTML = ''
+    if (ref.current) ref.current.innerHTML = ''
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  function handleInput(e: React.FormEvent<HTMLDivElement>) {
+    setInput(e.currentTarget.textContent || '')
+  }
+
+  function handleKeyDown(source: 'initial' | 'split', e: React.KeyboardEvent) {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSend()
+      handleSend(source)
     }
   }
 
@@ -77,6 +105,50 @@ export default function CreateVideoPage() {
     inputRef.current?.focus()
   }
 
+  const inputArea = (ref: React.RefObject<HTMLDivElement>, source: 'initial' | 'split') => (
+    <div className="cv-chat-row">
+      <RefBlock />
+      <div className="cv-rect">
+        <div
+          ref={ref}
+          className="cv-write-area"
+          contentEditable
+          role="textbox"
+          data-placeholder="Descreva o vídeo que deseja criar..."
+          onInput={handleInput}
+          onKeyDown={(e) => handleKeyDown(source, e)}
+          suppressContentEditableWarning
+        />
+        <div className="cv-actions">
+          <div className="cv-actions-left">
+            <button className="chat-btn" title="Anexar imagem">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </button>
+            <button className="chat-btn" title="Anexar arquivo">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+              </svg>
+            </button>
+          </div>
+          <div className="cv-actions-right">
+            <button className="chat-btn" title="Ditado">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
+              </svg>
+            </button>
+            <button className="chat-send" onClick={() => handleSend(source)}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div className="cv-page">
       {!showChat ? (
@@ -87,50 +159,7 @@ export default function CreateVideoPage() {
           </div>
 
           <div className="cv-init-chat">
-            <div className="chat-box">
-              <div className="cv-input-row">
-                <div className="cv-input-left">
-                  <button className="chat-btn" title="Anexar imagem">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                  </button>
-                  <button className="chat-btn" title="Anexar arquivo">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
-                    </svg>
-                  </button>
-                  <button className="cv-ref-btn" title="Adicionar referências">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 5v14M5 12h14" />
-                    </svg>
-                    <span>Referências</span>
-                  </button>
-                </div>
-                <div
-                  ref={inputRef}
-                  className="cv-input"
-                  contentEditable
-                  role="textbox"
-                  data-placeholder="Descreva o vídeo que deseja criar..."
-                  onInput={(e) => setInput(e.currentTarget.textContent || '')}
-                  onKeyDown={handleKeyDown}
-                  suppressContentEditableWarning
-                />
-                <div className="cv-input-right">
-                  <button className="chat-btn" title="Ditado">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
-                    </svg>
-                  </button>
-                  <button className="chat-send" onClick={handleSend}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+            {inputArea(inputRef, 'initial')}
             <div className="chat-presets">
               {presetQuestions.map((q, i) => (
                 <button key={i} className="preset-btn" onClick={() => handlePresetClick(q)}>{q}</button>
@@ -144,52 +173,16 @@ export default function CreateVideoPage() {
             <div className="cv-history" ref={historyRef}>
               {messages.map((msg, i) => (
                 <div key={i} className={`cv-msg ${msg.role}`}>
-                  <div className="cv-msg-label">{msg.role === 'user' ? 'Você' : 'TokToy IA'}</div>
-                  <div className="cv-msg-text">{msg.text}</div>
+                  <Avatar name={msg.role === 'user' ? 'Você' : 'T'} />
+                  <div className="cv-msg-body">
+                    <span className="cv-msg-name">{msg.role === 'user' ? 'Você' : 'TokToy IA'}</span>
+                    <span className="cv-msg-text">{msg.text}</span>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="cv-ref-bar">
-              <button className="cv-ref-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-                <span>Adicionar referências</span>
-              </button>
-            </div>
-
-            <div className="cv-chat-compact">
-              <div className="chat-box">
-                <div className="cv-input-row">
-                  <div className="cv-input-left">
-                    <button className="chat-btn" title="Anexar imagem">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-                    </button>
-                    <button className="chat-btn" title="Anexar arquivo">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" /></svg>
-                    </button>
-                  </div>
-                  <div
-                    className="cv-input"
-                    contentEditable
-                    role="textbox"
-                    data-placeholder="Digite sua solicitação..."
-                    onInput={(e) => setInput(e.currentTarget.textContent || '')}
-                    onKeyDown={handleKeyDown}
-                    suppressContentEditableWarning
-                  />
-                  <div className="cv-input-right">
-                    <button className="chat-btn" title="Ditado">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
-                    </button>
-                    <button className="chat-send" onClick={handleSend}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {inputArea(inputRef2, 'split')}
           </div>
 
           <div className="cv-right">
