@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 
 function RefBlock() {
   return (
@@ -19,13 +19,13 @@ function RefBlock() {
 }
 
 export default function PostCommercialPage() {
+  const [input, setInput] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
-  const inputText = useRef('')
 
   function handleSend() {
-    const text = inputText.current.trim()
+    const text = input.trim()
     if (!text) return
-    inputText.current = ''
+    setInput('')
     if (inputRef.current) inputRef.current.innerHTML = ''
   }
 
@@ -54,7 +54,7 @@ export default function PostCommercialPage() {
                 contentEditable
                 role="textbox"
                 data-placeholder="Descreva o post que deseja criar..."
-                onInput={(e) => { inputText.current = e.currentTarget.textContent || '' }}
+                onInput={(e) => setInput(e.currentTarget.textContent || '')}
                 onKeyDown={handleKeyDown}
                 suppressContentEditableWarning
               />

@@ -39,10 +39,10 @@ function Avatar({ name }: { name: string }) {
 export default function CreateVideoPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
+  const [input, setInput] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
   const inputRef2 = useRef<HTMLDivElement>(null)
   const historyRef = useRef<HTMLDivElement>(null)
-  const inputText = useRef('')
 
   useEffect(() => {
     if (historyRef.current) {
@@ -51,7 +51,7 @@ export default function CreateVideoPage() {
   }, [messages])
 
   function handleSend(source: 'initial' | 'split') {
-    const text = inputText.current.trim()
+    const text = input.trim()
     if (!text) return
 
     setShowChat(true)
@@ -67,7 +67,7 @@ export default function CreateVideoPage() {
       ])
     }, 800)
 
-    inputText.current = ''
+    setInput('')
     const ref = source === 'initial' ? inputRef : inputRef2
     if (ref.current) ref.current.innerHTML = ''
   }
@@ -89,7 +89,7 @@ export default function CreateVideoPage() {
           contentEditable
           role="textbox"
           data-placeholder="Descreva o vídeo que deseja criar..."
-          onInput={(e) => { inputText.current = e.currentTarget.textContent || '' }}
+          onInput={(e) => setInput(e.currentTarget.textContent || '')}
           onKeyDown={(e) => handleKeyDown(source, e)}
           suppressContentEditableWarning
         />

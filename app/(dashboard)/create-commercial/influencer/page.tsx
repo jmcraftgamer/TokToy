@@ -47,13 +47,13 @@ function RefBlock() {
 
 export default function InfluencerCommercialPage() {
   const [step, setStep] = useState<'influencer' | 'videotype' | 'product' | 'prompt'>('influencer')
+  const [input, setInput] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
-  const inputText = useRef('')
 
   function handleSend() {
-    const text = inputText.current.trim()
+    const text = input.trim()
     if (!text) return
-    inputText.current = ''
+    setInput('')
     if (inputRef.current) inputRef.current.innerHTML = ''
   }
 
@@ -168,7 +168,7 @@ export default function InfluencerCommercialPage() {
                   contentEditable
                   role="textbox"
                   data-placeholder="Descreva como quer que o influenciador apresente o produto..."
-                  onInput={(e) => { inputText.current = e.currentTarget.textContent || '' }}
+                  onInput={(e) => setInput(e.currentTarget.textContent || '')}
                   onKeyDown={handleKeyDown}
                   suppressContentEditableWarning
                 />
