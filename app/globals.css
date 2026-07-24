@@ -737,6 +737,27 @@ input::placeholder, textarea::placeholder {
   border-color: #444;
 }
 
+/* More scattered presets on create-video page */
+.cv-init-chat .chat-presets {
+  gap: 12px 16px;
+  justify-content: flex-start;
+  padding: 4px 8px;
+}
+
+.cv-init-chat .preset-btn:nth-child(2) {
+  margin-top: 6px;
+}
+
+.cv-init-chat .preset-btn:nth-child(3) {
+  margin-left: 14px;
+  margin-top: 2px;
+}
+
+.cv-init-chat .preset-btn:nth-child(4) {
+  margin-top: 8px;
+  margin-left: 6px;
+}
+
 /* Split layout after sending */
 .cv-split {
   flex: 1;
