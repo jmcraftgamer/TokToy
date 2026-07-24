@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const mockProducts = [
   { name: 'Fone Bluetooth X', price: 'R$ 89,90', sales: '1.2k vendas', trend: '+15%' },
@@ -32,6 +32,26 @@ function RefBlock() {
 
 export default function VideoCommercialPage() {
   const [step, setStep] = useState<'products' | 'create'>('products')
+  const [input, setInput] = useState('')
+  const inputRef = useRef<HTMLDivElement>(null)
+
+  function handleInput(e: React.FormEvent<HTMLDivElement>) {
+    setInput(e.currentTarget.textContent || '')
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
+
+  function handleSend() {
+    const text = input.trim()
+    if (!text) return
+    setInput('')
+    if (inputRef.current) inputRef.current.innerHTML = ''
+  }
 
   return (
     <div className="cv-page">
@@ -93,10 +113,13 @@ export default function VideoCommercialPage() {
               <RefBlock />
               <div className="cv-rect">
                 <div
+                  ref={inputRef}
                   className="cv-write-area"
                   contentEditable
                   role="textbox"
                   data-placeholder="Descreva o comercial que deseja criar..."
+                  onInput={handleInput}
+                  onKeyDown={handleKeyDown}
                   suppressContentEditableWarning
                 />
                 <div className="cv-actions">
@@ -112,9 +135,10 @@ export default function VideoCommercialPage() {
                     <button className="chat-btn" title="Ditado">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
                     </button>
-                    <button className="chat-send">
-                      <span style={{ fontSize: '0.8125rem', fontWeight: 500, marginRight: 4 }}>Generar</span>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                    <button className="chat-send" onClick={handleSend}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+                      </svg>
                     </button>
                   </div>
                 </div>
