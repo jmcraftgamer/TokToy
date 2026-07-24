@@ -20,19 +20,13 @@ function RefBlock() {
 
 export default function PostCommercialPage() {
   const inputRef = useRef<HTMLDivElement>(null)
-
-  function getText(): string {
-    return inputRef.current?.textContent?.trim() || ''
-  }
-
-  function clearInput() {
-    if (inputRef.current) inputRef.current.innerHTML = ''
-  }
+  const inputText = useRef('')
 
   function handleSend() {
-    const text = getText()
+    const text = inputText.current.trim()
     if (!text) return
-    clearInput()
+    inputText.current = ''
+    if (inputRef.current) inputRef.current.innerHTML = ''
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -60,6 +54,7 @@ export default function PostCommercialPage() {
                 contentEditable
                 role="textbox"
                 data-placeholder="Descreva o post que deseja criar..."
+                onInput={(e) => { inputText.current = e.currentTarget.textContent || '' }}
                 onKeyDown={handleKeyDown}
                 suppressContentEditableWarning
               />

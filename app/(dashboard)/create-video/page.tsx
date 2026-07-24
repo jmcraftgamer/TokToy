@@ -42,6 +42,7 @@ export default function CreateVideoPage() {
   const inputRef = useRef<HTMLDivElement>(null)
   const inputRef2 = useRef<HTMLDivElement>(null)
   const historyRef = useRef<HTMLDivElement>(null)
+  const inputText = useRef('')
 
   useEffect(() => {
     if (historyRef.current) {
@@ -49,17 +50,8 @@ export default function CreateVideoPage() {
     }
   }, [messages])
 
-  function getText(ref: React.RefObject<HTMLDivElement | null>): string {
-    return ref.current?.textContent?.trim() || ''
-  }
-
-  function clearRef(ref: React.RefObject<HTMLDivElement | null>) {
-    if (ref.current) ref.current.innerHTML = ''
-  }
-
   function handleSend(source: 'initial' | 'split') {
-    const ref = source === 'initial' ? inputRef : inputRef2
-    const text = getText(ref)
+    const text = inputText.current.trim()
     if (!text) return
 
     setShowChat(true)
@@ -75,7 +67,9 @@ export default function CreateVideoPage() {
       ])
     }, 800)
 
-    clearRef(ref)
+    inputText.current = ''
+    const ref = source === 'initial' ? inputRef : inputRef2
+    if (ref.current) ref.current.innerHTML = ''
   }
 
   function handleKeyDown(source: 'initial' | 'split', e: React.KeyboardEvent) {
@@ -95,6 +89,7 @@ export default function CreateVideoPage() {
           contentEditable
           role="textbox"
           data-placeholder="Descreva o vídeo que deseja criar..."
+          onInput={(e) => { inputText.current = e.currentTarget.textContent || '' }}
           onKeyDown={(e) => handleKeyDown(source, e)}
           suppressContentEditableWarning
         />
