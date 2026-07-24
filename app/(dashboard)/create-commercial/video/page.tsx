@@ -32,11 +32,20 @@ function RefBlock() {
 
 export default function VideoCommercialPage() {
   const [step, setStep] = useState<'products' | 'create'>('products')
-  const [input, setInput] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
 
-  function handleInput(e: React.FormEvent<HTMLDivElement>) {
-    setInput(e.currentTarget.textContent || '')
+  function getText(): string {
+    return inputRef.current?.textContent?.trim() || ''
+  }
+
+  function clearInput() {
+    if (inputRef.current) inputRef.current.innerHTML = ''
+  }
+
+  function handleSend() {
+    const text = getText()
+    if (!text) return
+    clearInput()
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -44,13 +53,6 @@ export default function VideoCommercialPage() {
       e.preventDefault()
       handleSend()
     }
-  }
-
-  function handleSend() {
-    const text = input.trim()
-    if (!text) return
-    setInput('')
-    if (inputRef.current) inputRef.current.innerHTML = ''
   }
 
   return (
@@ -118,7 +120,6 @@ export default function VideoCommercialPage() {
                   contentEditable
                   role="textbox"
                   data-placeholder="Descreva o comercial que deseja criar..."
-                  onInput={handleInput}
                   onKeyDown={handleKeyDown}
                   suppressContentEditableWarning
                 />

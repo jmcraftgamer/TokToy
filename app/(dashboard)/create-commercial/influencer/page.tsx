@@ -47,11 +47,20 @@ function RefBlock() {
 
 export default function InfluencerCommercialPage() {
   const [step, setStep] = useState<'influencer' | 'videotype' | 'product' | 'prompt'>('influencer')
-  const [input, setInput] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
 
-  function handleInput(e: React.FormEvent<HTMLDivElement>) {
-    setInput(e.currentTarget.textContent || '')
+  function getText(): string {
+    return inputRef.current?.textContent?.trim() || ''
+  }
+
+  function clearInput() {
+    if (inputRef.current) inputRef.current.innerHTML = ''
+  }
+
+  function handleSend() {
+    const text = getText()
+    if (!text) return
+    clearInput()
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -59,13 +68,6 @@ export default function InfluencerCommercialPage() {
       e.preventDefault()
       handleSend()
     }
-  }
-
-  function handleSend() {
-    const text = input.trim()
-    if (!text) return
-    setInput('')
-    if (inputRef.current) inputRef.current.innerHTML = ''
   }
 
   return (
@@ -172,7 +174,6 @@ export default function InfluencerCommercialPage() {
                   contentEditable
                   role="textbox"
                   data-placeholder="Descreva como quer que o influenciador apresente o produto..."
-                  onInput={handleInput}
                   onKeyDown={handleKeyDown}
                   suppressContentEditableWarning
                 />

@@ -39,7 +39,6 @@ function Avatar({ name }: { name: string }) {
 export default function CreateVideoPage() {
   const [messages, setMessages] = useState<Message[]>([])
   const [showChat, setShowChat] = useState(false)
-  const [input, setInput] = useState('')
   const inputRef = useRef<HTMLDivElement>(null)
   const inputRef2 = useRef<HTMLDivElement>(null)
   const historyRef = useRef<HTMLDivElement>(null)
@@ -50,9 +49,17 @@ export default function CreateVideoPage() {
     }
   }, [messages])
 
+  function getText(ref: React.RefObject<HTMLDivElement | null>): string {
+    return ref.current?.textContent?.trim() || ''
+  }
+
+  function clearRef(ref: React.RefObject<HTMLDivElement | null>) {
+    if (ref.current) ref.current.innerHTML = ''
+  }
+
   function handleSend(source: 'initial' | 'split') {
     const ref = source === 'initial' ? inputRef : inputRef2
-    const text = input.trim()
+    const text = getText(ref)
     if (!text) return
 
     setShowChat(true)
@@ -68,12 +75,7 @@ export default function CreateVideoPage() {
       ])
     }, 800)
 
-    setInput('')
-    if (ref.current) ref.current.innerHTML = ''
-  }
-
-  function handleInput(e: React.FormEvent<HTMLDivElement>) {
-    setInput(e.currentTarget.textContent || '')
+    clearRef(ref)
   }
 
   function handleKeyDown(source: 'initial' | 'split', e: React.KeyboardEvent) {
@@ -93,7 +95,6 @@ export default function CreateVideoPage() {
           contentEditable
           role="textbox"
           data-placeholder="Descreva o vídeo que deseja criar..."
-          onInput={handleInput}
           onKeyDown={(e) => handleKeyDown(source, e)}
           suppressContentEditableWarning
         />
