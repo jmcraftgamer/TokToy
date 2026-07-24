@@ -439,28 +439,6 @@ input::placeholder, textarea::placeholder {
   background: #2a2a2a;
 }
 
-.chat-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.preset-btn {
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.8125rem;
-  color: #666;
-  background: #0d0d0d;
-  border: 1px solid #1a1a1a;
-  transition: all 0.2s;
-}
-
-.preset-btn:hover {
-  color: #fff;
-  background: #1a1a1a;
-  border-color: #333;
-}
-
 /* Features */
 .features-section {
   margin-bottom: 48px;
@@ -739,14 +717,15 @@ input::placeholder, textarea::placeholder {
 .chat-presets {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
 }
 
 .preset-btn {
-  padding: 6px 14px;
+  padding: 8px 22px;
   border-radius: 20px;
   font-size: 0.8125rem;
-  color: #666;
+  color: #777;
   background: #0d0d0d;
   border: 1px solid #1a1a1a;
   transition: all 0.2s;
@@ -755,7 +734,7 @@ input::placeholder, textarea::placeholder {
 .preset-btn:hover {
   color: #fff;
   background: #1a1a1a;
-  border-color: #333;
+  border-color: #444;
 }
 
 /* Split layout after sending */
