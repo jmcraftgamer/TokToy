@@ -1421,3 +1421,856 @@ input::placeholder, textarea::placeholder {
   font-size: 0.75rem;
   color: #666;
 }
+
+/* Create Influencer Page */
+.ci-page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.ci-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease-out;
+  gap: 28px;
+  padding: 20px 0;
+}
+
+.ci-hero {
+  text-align: center;
+  max-width: 600px;
+}
+
+.ci-hero-title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.ci-hero-sub {
+  font-size: 0.9375rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.ci-create-btn {
+  padding: 12px 32px;
+  border-radius: 10px;
+  background: #111;
+  border: 1px solid #222;
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ci-create-btn:hover {
+  background: #1a1a1a;
+  border-color: #444;
+  transform: translateY(-2px);
+}
+
+/* Influencer list */
+.ci-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.ci-list-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.ci-list-new {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #1a1a1a;
+  color: #aaa;
+  font-size: 0.8125rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+  background: none;
+}
+
+.ci-list-new:hover {
+  color: #fff;
+  border-color: #444;
+  background: #111;
+}
+
+.ci-list-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.ci-list-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: #0d0d0d;
+  border-radius: 12px;
+  border: 1px solid #1a1a1a;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+}
+
+.ci-list-card:hover {
+  background: #111;
+  border-color: #333;
+  transform: translateY(-2px);
+}
+
+.ci-list-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ci-list-card-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.ci-list-card-desc {
+  font-size: 0.75rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.ci-list-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ci-panel-btn {
+  flex: 1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  background: #111;
+  border: 1px solid #222;
+  color: #aaa;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: center;
+}
+
+.ci-panel-btn:hover {
+  color: #fff;
+  border-color: #444;
+  background: #1a1a1a;
+}
+
+/* Configure form */
+.ci-config {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  gap: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.ci-config-header {
+  text-align: center;
+}
+
+.ci-config-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.ci-config-sub {
+  font-size: 0.8125rem;
+  color: #555;
+}
+
+.ci-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ci-photo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ci-photo-upload {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #0d0d0d;
+  border: 1px dashed #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #555;
+}
+
+.ci-photo-upload:hover {
+  border-color: #555;
+  color: #fff;
+  background: #111;
+}
+
+.ci-photo-label {
+  font-size: 0.75rem;
+  color: #555;
+}
+
+.ci-field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.ci-field-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ci-field-label {
+  font-size: 0.75rem;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ci-field-input {
+  background: #0d0d0d;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.ci-field-input:focus {
+  border-color: #444;
+}
+
+.ci-field-input::placeholder {
+  color: #444;
+}
+
+.ci-field-select {
+  background: #0d0d0d;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.ci-field-select:focus {
+  border-color: #444;
+}
+
+.ci-field-textarea {
+  background: #0d0d0d;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  resize: none;
+  min-height: 100px;
+  transition: border-color 0.2s;
+}
+
+.ci-field-textarea:focus {
+  border-color: #444;
+}
+
+.ci-field-textarea::placeholder {
+  color: #444;
+}
+
+.ci-config-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.ci-back-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #1a1a1a;
+  color: #888;
+  font-size: 0.8125rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+  background: none;
+}
+
+.ci-back-btn:hover {
+  color: #fff;
+  border-color: #444;
+  background: #111;
+}
+
+.ci-generate-btn {
+  padding: 10px 28px;
+  border-radius: 8px;
+  background: #111;
+  border: 1px solid #222;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ci-generate-btn:hover {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+/* Train page */
+.ci-train {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.ci-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ci-progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ci-progress-label {
+  font-size: 0.75rem;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ci-progress-pct {
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: 500;
+}
+
+.ci-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #111;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ci-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #555;
+  border-radius: 2px;
+  transition: width 0.5s ease-out;
+}
+
+.ci-train-layout {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ci-train-left {
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.ci-train-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.ci-train-section-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #888;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ci-image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.ci-image-thumb {
+  aspect-ratio: 1;
+  background: #0a0a0a;
+  border-radius: 8px;
+  border: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s;
+  overflow: hidden;
+}
+
+.ci-image-thumb:hover {
+  border-color: #444;
+  color: #888;
+}
+
+.ci-image-add {
+  aspect-ratio: 1;
+  background: #0d0d0d;
+  border-radius: 8px;
+  border: 1px dashed #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ci-image-add:hover {
+  border-color: #555;
+  color: #888;
+}
+
+.ci-train-textarea {
+  background: #0d0d0d;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.8125rem;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  resize: none;
+  min-height: 80px;
+  transition: border-color 0.2s;
+}
+
+.ci-train-textarea:focus {
+  border-color: #444;
+}
+
+.ci-train-textarea::placeholder {
+  color: #444;
+}
+
+.ci-train-responses {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.ci-train-response {
+  padding: 10px 14px;
+  background: #0d0d0d;
+  border-radius: 10px;
+  border: 1px solid #1a1a1a;
+  font-size: 0.8125rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.ci-train-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.ci-train-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.ci-save-btn {
+  padding: 10px 28px;
+  border-radius: 8px;
+  background: #111;
+  border: 1px solid #222;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ci-save-btn:hover {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+/* Dashboard layout */
+.ci-dashboard-layout {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.ci-dash-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Right sidebar */
+.ci-right-sidebar {
+  width: 60px;
+  height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  overflow: hidden;
+  border-left: none;
+}
+
+.ci-right-sidebar.expanded {
+  width: 200px;
+}
+
+.ci-sidebar-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 8px;
+  overflow-y: auto;
+}
+
+.ci-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  color: #666;
+  transition: all 0.2s;
+  white-space: nowrap;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  background: none;
+  border: none;
+  min-height: 38px;
+}
+
+.ci-tab-btn:hover {
+  color: #fff;
+  background: #111;
+}
+
+.ci-tab-btn.active {
+  color: #fff;
+  background: #1a1a1a;
+}
+
+.ci-tab-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ci-tab-label {
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.ci-tab-label.hidden {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.ci-dash-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.ci-dash-chat-inner {
+  width: 100%;
+  max-width: 700px;
+}
+
+.ci-dash-training {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.ci-dash-tiktok {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ci-tiktok-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.ci-tiktok-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.ci-tiktok-sub {
+  font-size: 0.875rem;
+  color: #555;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.ci-tiktok-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.ci-tiktok-input {
+  background: #0d0d0d;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.875rem;
+  color: #fff;
+  outline: none;
+  font-family: inherit;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.ci-tiktok-input:focus {
+  border-color: #444;
+}
+
+.ci-tiktok-input::placeholder {
+  color: #444;
+}
+
+.ci-tiktok-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: #111;
+  border: 1px solid #222;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ci-tiktok-btn:hover {
+  background: #1a1a1a;
+  border-color: #444;
+}
+
+.ci-dash-products {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* Stats */
+.ci-stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.ci-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.ci-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  background: #0d0d0d;
+  border-radius: 10px;
+  border: 1px solid #1a1a1a;
+}
+
+.ci-stat-value {
+  font-size: 1.75rem;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.ci-stat-label {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ci-auto-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #0d0d0d;
+  border-radius: 10px;
+  border: 1px solid #1a1a1a;
+}
+
+.ci-auto-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ci-auto-title {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.ci-auto-desc {
+  font-size: 0.8125rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.ci-toggle {
+  width: 40px;
+  height: 22px;
+  background: #1a1a1a;
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+  border: none;
+  padding: 0;
+}
+
+.ci-toggle.active {
+  background: #333;
+}
+
+.ci-toggle-knob {
+  width: 18px;
+  height: 18px;
+  background: #555;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.2s;
+}
+
+.ci-toggle.active .ci-toggle-knob {
+  background: #fff;
+  left: 20px;
+}

@@ -15,6 +15,19 @@ Primeiro eu quero que você somente faça um site que abre em uma tela preta, um
 Pronpt de Instruções
 
 
-Ótimo, vou ser sincero, ficou muito bom mais tem varias coisas que nois podemos mudar
+Bom vamos para a interface de editar com Ia. Bom é o seguinte, aqui será um editor de vídeos normal mais com um chat de IA, para implementar coisas no vídeo, fazer cortes e qualquer coisas e entre outras coisas. bom au entarr nessa interface a pessoa vai abrir uma interface de inicio, terá um titulo, edite seus vídeos com IA e em baixo, Editeum vídeo inteiro com IA, implementando elementos mudando movimentos fazendo cortes e entre varias outras coisas, e em baixo outras coisas para chamar a atenção, e uma opção edite s primeiro vídeo, essa interface será de inicio se a pessoa entrar pela primeira vez, ous e ela não tiver nenhum vídeo editado ainda, ai au clicar na opção ele vai pra próxima, aba, mais se  a pessoa já tiver editado um vídeo ele vai aparecer numa aba em que lá terá um histórico de videos editados e uma opção de editar mais um vídeo, bom se a pesso clicar em editar um vídeo em ambas abas, ele vai cair na aba do editor, au entrar ness aba terá um chat de IA no canto esquerdo, em baixo um cardbox para escrever ingual aus outros e em cima o histórico de conversa, as mensagens que eu mandei e as respostas da IA. Bom já no resto da tela vai ser separada em outros elementos, como na parte superior terá um preview, para a pessoa visualizar o vídeo, e em baixo opções como de play, pausar, adiantar alguns segundos e etc e em baixo terá varias opções para editar o vídeo, como adicionar cortes e entre outras coisas, as opções serão
 
-1. A CardBox, eu vi eu vc colocou por exemplo a parte de ver e ler as mensagems, eu não quero que seja ali, e você colocou uma parte de escrever dentro do cardbox, eu não quero que tenha uma parte para escrever, a parte de escrever é o cardbox, o retângulo, no local onde tem a parte que mostra a conversa, é lá onde a pessoa poderá escrever, eu não quer que tenha nenhuma coisa amais no retângulo, sóas opções de ditar, mandar, mandar arquivos, e etc. E o local onde vai ficar o histórico de conversas e a resposta da IA é aonde fica o titulo e o subtítulo, au mandar uma mensagem o titulo vai sumir e lá vai virar o histórico. e sobre as perguntas pré escrita vão ficar em baixo do retângulo , au clicar vai escrever no retângulo. outr detalhe é que vc colocou algumas linhas para separar a barra lateral da interface, remova, e também a linha da barra de cima, e as opções d econectores essas opções eu quero que elas fiquem na barra de cima, elas estão mal colocadas
+A primeira terá o sinbulo de um mause, essa opção vai servir para a pessoa trocar as funções do mause, como colocar para cortes, para mover arquivos na timelie, e entre outras opções, a cada opção vai trocar o sinbulo pra identificar o  tipo do mause que ele esta
+A outra opção será de excruir, essa opção vai excruir uma parte do vídeo que esta selecionada
+Outra opção será de adicionar textos no vídeo, au apertar nessa opção vai adicionar um texto no vídeo e na timeline
+Outra opção é de remover o fundo d euma parte do vídeo que esta selecionada
+Outra opção é de adicionar legendas automáticas
+Outra opção é de adicionar imagens na timeline e no vídeo
+Ouyra opção é de desfazer oque ele tinha feito
+Outra é refazer oque ele tinha desfeito
+Outra opção é de adicionar musicas e aldios
+Outra opção é de adicionar transições e entre outras coisas
+coloque outras opções que sejam essenciais em um editor de vídeo
+
+
+Já em baixo dessas opções terá  a timeline, lá vai aparecer todos os elemtos do videoe terá uma agulha para ele selecionar onde ele quer cortar no vídeo e essas coisas, além de ele poder mover os arquivos entre a timiline e essas coisas. e terá uma opção no canto superior direita, a de exportar, e eu esqueci mais au lado da opção de previwe tem uma opção de adicionar vídeo pra editar, au escolher vai sumir essa opção, e a pessoa pode escolher mais de um vídeo. au clliar em exportar vai aparecer varias opções como de escolher a pasta que ele será salvo, e escolher se ele será  publicado no tiktok e escolher a conta, e opções de resolução e essas coisas normais
