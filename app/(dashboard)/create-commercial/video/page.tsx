@@ -2,16 +2,39 @@
 
 import { useState, useRef } from 'react'
 
-const mockProducts = [
-  { name: 'Fone Bluetooth X', price: 'R$ 89,90', sales: '1.2k vendas', trend: '+15%' },
-  { name: 'Kit Skincare Glow', price: 'R$ 129,90', sales: '3.4k vendas', trend: '+28%' },
-  { name: 'Relógio Esportivo', price: 'R$ 199,90', sales: '856 vendas', trend: '+8%' },
-  { name: 'Camiseta Oversized', price: 'R$ 59,90', sales: '5.1k vendas', trend: '+42%' },
-  { name: 'Creatina Pure 300g', price: 'R$ 79,90', sales: '2.3k vendas', trend: '+11%' },
-  { name: 'Luminária LED Mesa', price: 'R$ 45,90', sales: '987 vendas', trend: '+19%' },
-  { name: 'Cadeira Gamer Pro', price: 'R$ 899,90', sales: '634 vendas', trend: '+5%' },
-  { name: 'Perfume Importado', price: 'R$ 249,90', sales: '4.2k vendas', trend: '+33%' },
-  { name: 'Smartwatch Ultra', price: 'R$ 459,90', sales: '1.8k vendas', trend: '+22%' },
+const categories = [
+  {
+    name: 'Eletrônicos',
+    items: [
+      { name: 'Fone Bluetooth X', price: 'R$ 89,90', sales: '1.2k', trend: '+15%' },
+      { name: 'Smartwatch Ultra', price: 'R$ 459,90', sales: '1.8k', trend: '+22%' },
+      { name: 'Carregador Fast', price: 'R$ 39,90', sales: '3.2k', trend: '+45%' },
+    ],
+  },
+  {
+    name: 'Moda',
+    items: [
+      { name: 'Camiseta Oversized', price: 'R$ 59,90', sales: '5.1k', trend: '+42%' },
+      { name: 'Tênis Runner Pro', price: 'R$ 299,90', sales: '2.4k', trend: '+18%' },
+      { name: 'Mochila Urbana', price: 'R$ 149,90', sales: '1.1k', trend: '+12%' },
+    ],
+  },
+  {
+    name: 'Beleza & Saúde',
+    items: [
+      { name: 'Kit Skincare Glow', price: 'R$ 129,90', sales: '3.4k', trend: '+28%' },
+      { name: 'Perfume Importado', price: 'R$ 249,90', sales: '4.2k', trend: '+33%' },
+      { name: 'Creatina Pure 300g', price: 'R$ 79,90', sales: '2.3k', trend: '+11%' },
+    ],
+  },
+  {
+    name: 'Casa & Fitness',
+    items: [
+      { name: 'Luminária LED Mesa', price: 'R$ 45,90', sales: '987', trend: '+19%' },
+      { name: 'Cadeira Gamer Pro', price: 'R$ 899,90', sales: '634', trend: '+5%' },
+      { name: 'Relógio Esportivo', price: 'R$ 199,90', sales: '856', trend: '+8%' },
+    ],
+  },
 ]
 
 function RefBlock() {
@@ -72,27 +95,34 @@ export default function VideoCommercialPage() {
           </div>
 
           <div className="cp-products-grid">
-            {mockProducts.map((p, i) => (
-              <button key={i} className="cp-product-card" onClick={() => setStep('create')}>
-                <div className="cp-product-frame">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#444" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
-                  </svg>
+            {categories.map((cat) => (
+              <div key={cat.name} className="cp-category-section">
+                <h3 className="cp-category-title">{cat.name}</h3>
+                <div className="cp-category-items">
+                  {cat.items.map((p, i) => (
+                    <button key={i} className="cp-product-card" onClick={() => setStep('create')}>
+                      <div className="cp-product-frame">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#444" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+                        </svg>
+                      </div>
+                      <div className="cp-product-info">
+                        <span className="cp-product-name">{p.name}</span>
+                        <span className="cp-product-price">{p.price}</span>
+                        <div className="cp-product-stats">
+                          <span className="cp-product-sales">{p.sales} vendas</span>
+                          <span className="cp-product-trend">{p.trend}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-                <div className="cp-product-info">
-                  <span className="cp-product-name">{p.name}</span>
-                  <span className="cp-product-price">{p.price}</span>
-                  <div className="cp-product-stats">
-                    <span className="cp-product-sales">{p.sales}</span>
-                    <span className="cp-product-trend">{p.trend}</span>
-                  </div>
-                </div>
-              </button>
+              </div>
             ))}
           </div>
 
           <div className="cp-products-footer">
-            <span className="cp-products-count">{mockProducts.length} produtos encontrados</span>
+            <span className="cp-products-count">12 produtos encontrados</span>
           </div>
         </div>
       )}

@@ -20,13 +20,29 @@ const mockVideoTypes = [
   { name: 'Humor', desc: 'Comercial criativo e engraçado' },
 ]
 
-const mockProducts = [
-  { name: 'Fone Bluetooth X', price: 'R$ 89,90', sales: '1.2k' },
-  { name: 'Kit Skincare Glow', price: 'R$ 129,90', sales: '3.4k' },
-  { name: 'Relógio Esportivo', price: 'R$ 199,90', sales: '856' },
-  { name: 'Creatina Pure 300g', price: 'R$ 79,90', sales: '2.3k' },
-  { name: 'Cadeira Gamer Pro', price: 'R$ 899,90', sales: '634' },
-  { name: 'Perfume Importado', price: 'R$ 249,90', sales: '4.2k' },
+const influencerCategories = [
+  {
+    name: 'Eletrônicos',
+    items: [
+      { name: 'Fone Bluetooth X', price: 'R$ 89,90', sales: '1.2k' },
+      { name: 'Smartwatch Ultra', price: 'R$ 459,90', sales: '1.8k' },
+    ],
+  },
+  {
+    name: 'Beleza & Saúde',
+    items: [
+      { name: 'Kit Skincare Glow', price: 'R$ 129,90', sales: '3.4k' },
+      { name: 'Perfume Importado', price: 'R$ 249,90', sales: '4.2k' },
+      { name: 'Creatina Pure 300g', price: 'R$ 79,90', sales: '2.3k' },
+    ],
+  },
+  {
+    name: 'Casa & Fitness',
+    items: [
+      { name: 'Cadeira Gamer Pro', price: 'R$ 899,90', sales: '634' },
+      { name: 'Relógio Esportivo', price: 'R$ 199,90', sales: '856' },
+    ],
+  },
 ]
 
 function RefBlock() {
@@ -132,20 +148,27 @@ export default function InfluencerCommercialPage() {
             </button>
           </div>
 
-          <div className="cp-products-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-            {mockProducts.map((p, i) => (
-              <button key={i} className="cp-product-card" onClick={() => setStep('prompt')}>
-                <div className="cp-product-frame">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#444" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+          <div className="cp-products-grid" style={{ gridTemplateColumns: 'none', display: 'flex', flexDirection: 'column', gap: 24 }}>
+            {influencerCategories.map((cat) => (
+              <div key={cat.name} className="cp-category-section">
+                <h3 className="cp-category-title">{cat.name}</h3>
+                <div className="cp-category-items" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+                  {cat.items.map((p, i) => (
+                    <button key={i} className="cp-product-card" onClick={() => setStep('prompt')}>
+                      <div className="cp-product-frame">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#444" strokeWidth="1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg>
+                      </div>
+                      <div className="cp-product-info">
+                        <span className="cp-product-name">{p.name}</span>
+                        <span className="cp-product-price">{p.price}</span>
+                        <div className="cp-product-stats">
+                          <span className="cp-product-sales">{p.sales} vendas</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-                <div className="cp-product-info">
-                  <span className="cp-product-name">{p.name}</span>
-                  <span className="cp-product-price">{p.price}</span>
-                  <div className="cp-product-stats">
-                    <span className="cp-product-sales">{p.sales} vendas</span>
-                  </div>
-                </div>
-              </button>
+              </div>
             ))}
           </div>
         </div>

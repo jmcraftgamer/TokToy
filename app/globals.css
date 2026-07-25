@@ -1255,18 +1255,38 @@ input::placeholder, textarea::placeholder {
 }
 
 .cp-products-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cp-category-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cp-category-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #888;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cp-category-items {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
 }
 
 .cp-product-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
+  gap: 6px;
+  padding: 10px;
   background: #0d0d0d;
-  border-radius: 12px;
+  border-radius: 10px;
   border: 1px solid #1a1a1a;
   transition: all 0.2s;
   cursor: pointer;
@@ -1284,7 +1304,7 @@ input::placeholder, textarea::placeholder {
 .cp-product-frame {
   aspect-ratio: 1;
   background: #080808;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1294,17 +1314,20 @@ input::placeholder, textarea::placeholder {
 .cp-product-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .cp-product-name {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: #ddd;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cp-product-price {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   color: #fff;
   font-weight: 500;
 }
@@ -1312,17 +1335,17 @@ input::placeholder, textarea::placeholder {
 .cp-product-stats {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 2px;
+  gap: 6px;
+  margin-top: 1px;
 }
 
 .cp-product-sales {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   color: #666;
 }
 
 .cp-product-trend {
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   color: #3a6;
 }
 
