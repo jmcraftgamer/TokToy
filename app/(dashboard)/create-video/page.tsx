@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useDictation } from '../../hooks/useDictation'
+import { useFileAttachments, AttachmentsBar } from '../../components/FileAttachments'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -28,6 +30,21 @@ export default function CreateVideoPage() {
   const inputRef2 = useRef<HTMLDivElement>(null)
   const historyRef = useRef<HTMLDivElement>(null)
 
+  const { files, inputRef: fileInputRef, openPicker, handleSelect, removeFile } = useFileAttachments()
+  const { listening, toggle: toggleDictation } = useDictation((text) => {
+    if (inputRef.current?.dataset.active === 'split') {
+      if (inputRef2.current) {
+        inputRef2.current.textContent = text
+        setInput(text)
+      }
+    } else {
+      if (inputRef.current) {
+        inputRef.current.textContent = text
+        setInput(text)
+      }
+    }
+  })
+
   useEffect(() => {
     if (historyRef.current) {
       historyRef.current.scrollTop = historyRef.current.scrollHeight
@@ -36,17 +53,17 @@ export default function CreateVideoPage() {
 
   function handleSend(source: 'initial' | 'split') {
     const text = input.trim()
-    if (!text) return
+    if (!text && files.length === 0) return
 
     setShowChat(true)
-    setMessages((prev) => [...prev, { role: 'user', text }])
+    setMessages((prev) => [...prev, { role: 'user', text: text || '[Arquivos enviados]' }])
 
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
         {
           role: 'assistant',
-          text: `Ótimo! Recebi sua solicitação: "${text}". Estou processando e em breve gerarei seu vídeo.`,
+          text: `Ótimo! Recebi sua solicitação: "${text || 'arquivos'}". Estou processando e em breve gerarei seu vídeo.`,
         },
       ])
     }, 800)
@@ -65,7 +82,7 @@ export default function CreateVideoPage() {
 
   const inputArea = (ref: React.RefObject<HTMLDivElement>, source: 'initial' | 'split') => (
     <div className="cv-rect unified">
-      <div className="cv-ref-block">
+      <div className="cv-ref-block" onClick={openPicker}>
         <div className="ref-icon-area">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
@@ -77,34 +94,38 @@ export default function CreateVideoPage() {
         <span className="ref-label">Referências</span>
       </div>
       <div className="cv-rect-body">
+        <AttachmentsBar files={files} onRemove={removeFile} />
         <div
           ref={ref}
           className="cv-write-area"
           contentEditable
           role="textbox"
           data-placeholder="Descreva o vídeo que deseja criar..."
+          data-active={source}
           onInput={(e) => setInput(e.currentTarget.textContent || '')}
           onKeyDown={(e) => handleKeyDown(source, e)}
           suppressContentEditableWarning
         />
         <div className="cv-actions">
           <div className="cv-actions-left">
-            <button className="chat-btn" title="Anexar imagem">
+            <button className="chat-btn" title="Anexar imagem" onClick={openPicker}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </button>
-            <button className="chat-btn" title="Anexar arquivo">
+            <button className="chat-btn" title="Anexar arquivo" onClick={openPicker}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
               </svg>
             </button>
           </div>
           <div className="cv-actions-right">
-            <button className="chat-btn" title="Ditado">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
-              </svg>
+            <button className={`chat-btn ${listening ? 'listening' : ''}`} title={listening ? 'Parar ditado' : 'Ditado'} onClick={toggleDictation}>
+              {listening ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
+              )}
             </button>
             <button className="chat-send" onClick={() => handleSend(source)}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -114,6 +135,7 @@ export default function CreateVideoPage() {
           </div>
         </div>
       </div>
+      <input ref={fileInputRef} type="file" multiple accept="image/*,video/*,audio/*" onChange={handleSelect} style={{ display: 'none' }} />
     </div>
   )
 

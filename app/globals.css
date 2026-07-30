@@ -422,6 +422,17 @@ input::placeholder, textarea::placeholder {
   background: #1a1a1a;
 }
 
+.chat-btn.listening {
+  color: #f55;
+  background: #1a0a0a;
+  animation: pulseMic 1s ease-in-out infinite;
+}
+
+@keyframes pulseMic {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
 .chat-send {
   width: 36px;
   height: 36px;
@@ -2573,6 +2584,12 @@ input::placeholder, textarea::placeholder {
   background: #2a2a2a;
 }
 
+.ev-chat-send.listening {
+  color: #f55;
+  background: #1a0a0a;
+  animation: pulseMic 1s ease-in-out infinite;
+}
+
 /* Main editor area */
 .ev-editor-main {
   flex: 1;
@@ -2863,4 +2880,79 @@ input::placeholder, textarea::placeholder {
   height: 10px;
   background: #888;
   border-radius: 50%;
+}
+
+/* Attachments bar */
+.attachments-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px 4px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  min-height: 0;
+}
+
+.attachments-bar::-webkit-scrollbar {
+  height: 2px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px 3px 3px;
+  background: #111;
+  border-radius: 6px;
+  border: 1px solid #1a1a1a;
+  flex-shrink: 0;
+  max-width: 160px;
+}
+
+.attachment-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: #555;
+}
+
+.attachment-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.attachment-name {
+  font-size: 0.6875rem;
+  color: #999;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
+}
+
+.attachment-remove {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  color: #555;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.attachment-remove:hover {
+  color: #fff;
+  background: #2a1a1a;
 }

@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useRef } from 'react'
+import { useDictation } from '../../hooks/useDictation'
+import { useFileAttachments, AttachmentsBar } from '../../components/FileAttachments'
 
 const mockHistory = [
   { name: 'Review Produto Final', date: '24/07/2026', dur: '1:32' },
@@ -40,11 +42,18 @@ export default function EditVideoPage() {
   const [chatInput, setChatInput] = useState('')
   const [messages, setMessages] = useState<{ role: string; text: string }[]>([])
   const chatInputRef = useRef<HTMLDivElement>(null)
+  const { files, inputRef: fileInputRef, openPicker, handleSelect, removeFile } = useFileAttachments()
+  const { listening, toggle: toggleDictation } = useDictation((text) => {
+    if (chatInputRef.current) {
+      chatInputRef.current.textContent = text
+      setChatInput(text)
+    }
+  })
 
   function handleChatSend() {
     const text = chatInput.trim()
-    if (!text) return
-    setMessages((prev) => [...prev, { role: 'user', text }])
+    if (!text && files.length === 0) return
+    setMessages((prev) => [...prev, { role: 'user', text: text || '[Arquivos enviados]' }])
     setChatInput('')
     if (chatInputRef.current) chatInputRef.current.innerHTML = ''
   }
@@ -115,7 +124,6 @@ export default function EditVideoPage() {
 
       {step === 'editor' && (
         <div className="ev-editor">
-          {/* Left chat panel */}
           <div className="ev-editor-left">
             <span className="ev-editor-chat-title">Comandos de IA</span>
 
@@ -133,6 +141,7 @@ export default function EditVideoPage() {
             </div>
 
             <div className="ev-chat-input-area">
+              <AttachmentsBar files={files} onRemove={removeFile} />
               <div className="ev-chat-input-box">
                 <div
                   ref={chatInputRef}
@@ -144,18 +153,25 @@ export default function EditVideoPage() {
                   onKeyDown={handleChatKeyDown}
                   suppressContentEditableWarning
                 />
-                <button className="ev-chat-send" onClick={handleChatSend}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-                  </svg>
+                <button className="chat-btn" title="Anexar" onClick={openPicker} style={{ width: 28, height: 28 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+                </button>
+                <button className={`ev-chat-send ${listening ? 'listening' : ''}`} title={listening ? 'Parar' : 'Ditado'} onClick={toggleDictation} style={{ width: 28, height: 28 }}>
+                  {listening ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" /></svg>
+                  )}
+                </button>
+                <button className="ev-chat-send" onClick={handleChatSend} style={{ width: 28, height: 28 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
                 </button>
               </div>
             </div>
+            <input ref={fileInputRef} type="file" multiple accept="image/*,video/*,audio/*" onChange={handleSelect} style={{ display: 'none' }} />
           </div>
 
-          {/* Main editor area */}
           <div className="ev-editor-main">
-            {/* Preview */}
             <div className="ev-preview-area">
               <div className="ev-preview-top-bar">
                 {!hasVideo && (
@@ -199,7 +215,6 @@ export default function EditVideoPage() {
               </div>
             </div>
 
-            {/* Player controls */}
             {hasVideo && (
               <div className="ev-preview-controls">
                 <button className="ev-ctrl-btn">
@@ -223,7 +238,6 @@ export default function EditVideoPage() {
               </div>
             )}
 
-            {/* Toolbar */}
             <div className="ev-toolbar">
               {toolGroups.map((group, gi) => (
                 <span key={gi} style={{ display: 'contents' }}>
@@ -247,7 +261,6 @@ export default function EditVideoPage() {
               ))}
             </div>
 
-            {/* Timeline */}
             <div className="ev-timeline-area">
               <div className="ev-timeline-header">
                 <span className="ev-timeline-label">Timeline</span>
