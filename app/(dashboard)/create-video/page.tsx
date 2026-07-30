@@ -106,6 +106,7 @@ export default function CreateVideoPage() {
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [generatedVideo, setGeneratedVideo] = useState<string | null>(null)
   const systemPromptRef = useRef('')
+  const userTextRef = useRef('')
   const inputRef = useRef<HTMLDivElement>(null)
   const chatRef = useRef<HTMLDivElement>(null)
   const { files, inputRef: fileInputRef, openPicker, handleSelect, removeFile } = useFileAttachments()
@@ -136,6 +137,8 @@ export default function CreateVideoPage() {
   async function handleSend() {
     const text = input.trim()
     if (!text && files.length === 0) return
+
+    userTextRef.current = text
 
     addMessage({ role: 'user', type: 'text', text: text || '[Arquivos enviados]' })
     setInput('')
@@ -277,7 +280,7 @@ export default function CreateVideoPage() {
 
     setPhase('thinking')
 
-    const context = `PEDIDO DO USUÁRIO: ${input}\n\nDETALHES FORNECIDOS:\n${updated.map((q) => `- ${q.text}: ${q.answer}`).join('\n')}`
+    const context = `PEDIDO DO USUÁRIO: ${userTextRef.current}\n\nDETALHES FORNECIDOS:\n${updated.map((q) => `- ${q.text}: ${q.answer}`).join('\n')}`
 
     try {
       const res = await fetch('/api/chat', {
