@@ -89,39 +89,13 @@ function missingDetails(text: string): Question[] {
   return questions
 }
 
-function buildVideoPrompt(userText: string, questions: Question[]): string {
-  const details: Record<string, string> = {}
-  questions.forEach((q) => {
-    if (q.answer) details[q.id] = q.answer
-  })
-
-  let prompt = `CRIE UM VÍDEO COM AS SEGUINTES ESPECIFICAÇÕES:\n\n`
-  prompt += `PEDIDO DO USUÁRIO: ${userText}\n\n`
-  prompt += `DETALHES ADICIONAIS:\n`
-  prompt += `- Proporção: ${details.ratio || '9:16 (TikTok)'}\n`
-  prompt += `- Estilo visual: ${details.style || 'Realista'}\n`
-  prompt += `- Duração: ${details.duration || '30 segundos'}\n`
-  prompt += `- Tom: ${details.tone || 'Profissional'}\n\n`
-  prompt += `Descreva o vídeo em detalhes: cena, iluminação, movimentos de câmera, transições, áudio e todos os elementos necessários para criar o vídeo mais realista e profissional possível.`
-
-  return prompt
-}
-
-function generateResponse(text: string): string {
-  const lower = text.toLowerCase()
-  if (lower.includes('oi') || lower.includes('olá') || lower.includes('ola') || lower.includes('bom dia') || lower.includes('boa tarde') || lower.includes('boa noite')) {
-    return 'Olá! Como posso ajudar você hoje? Você pode me pedir para criar um vídeo, fazer um comercial, ou tirar dúvidas sobre a plataforma.'
+function parseAIResponse(text: string): { chat: string; prompt: string | null } {
+  const chatMatch = text.match(/CHAT:\s*([\s\S]*?)(?:\nPROMPT:|$)/)
+  const promptMatch = text.match(/PROMPT:\s*([\s\S]*)$/)
+  return {
+    chat: chatMatch ? chatMatch[1].trim() : text,
+    prompt: promptMatch ? promptMatch[1].trim() : null,
   }
-  if (lower.includes('preço') || lower.includes('preco') || lower.includes('plano') || lower.includes('premium') || lower.includes('quanto custa')) {
-    return 'Atualmente temos planos a partir de R$ 29,90/mês. O plano Premium inclui criação ilimitada de vídeos, remoção de marca d\'água e prioridade na fila de renderização. Quer criar um vídeo para testar?'
-  }
-  if (lower.includes('conectar') || lower.includes('tiktok') && (lower.includes('conta') || lower.includes('login'))) {
-    return 'Para conectar sua conta do TikTok, vá até Configurações > Conectar TikTok e faça o login. Após conectar, você poderá publicar vídeos diretamente pela plataforma.'
-  }
-  if (lower.includes('formato') || lower.includes('suportado') || lower.includes('resolução') || lower.includes('resolucao')) {
-    return 'Suportamos os principais formatos de vídeo: MP4, MOV, AVI e WebM. As resoluções disponíveis são 720p, 1080p e 4K. A proporção pode ser 9:16 (TikTok), 16:9 (YouTube), 1:1 ou 4:5 (Instagram).'
-  }
-  return 'Entendi sua mensagem! Se você quiser criar um vídeo, é só me descrever o que você precisa. Posso criar vídeos comerciais, posts para redes sociais, conteúdos para TikTok e muito mais. Como posso ajudar?'
 }
 
 export default function CreateVideoPage() {
@@ -130,6 +104,8 @@ export default function CreateVideoPage() {
   const [input, setInput] = useState('')
   const [questions, setQuestions] = useState<Question[]>([])
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
+  const [generatedVideo, setGeneratedVideo] = useState<string | null>(null)
+  const systemPromptRef = useRef('')
   const inputRef = useRef<HTMLDivElement>(null)
   const chatRef = useRef<HTMLDivElement>(null)
   const { files, inputRef: fileInputRef, openPicker, handleSelect, removeFile } = useFileAttachments()
@@ -146,11 +122,18 @@ export default function CreateVideoPage() {
     }
   }, [messages, phase])
 
+  useEffect(() => {
+    fetch('/prompts/instrucoes-video.txt')
+      .then((r) => r.text())
+      .then((t) => { systemPromptRef.current = t })
+      .catch(() => {})
+  }, [])
+
   function addMessage(msg: Message) {
     setMessages((prev) => [...prev, msg])
   }
 
-  function handleSend() {
+  async function handleSend() {
     const text = input.trim()
     if (!text && files.length === 0) return
 
@@ -160,7 +143,7 @@ export default function CreateVideoPage() {
 
     setPhase('thinking')
 
-    setTimeout(() => {
+    try {
       if (isVideoCreation(text)) {
         const missing = missingDetails(text)
         setQuestions(missing)
@@ -169,28 +152,107 @@ export default function CreateVideoPage() {
           addMessage({
             role: 'assistant',
             type: 'video_desc',
-            text: `Vou criar um vídeo baseado no seu pedido! Antes disso, preciso de algumas informações para deixar o resultado perfeito.`,
+            text: 'Vou criar um vídeo baseado no seu pedido! Antes disso, preciso de algumas informações para deixar o resultado perfeito.',
           })
           setCurrentQuestionIdx(0)
           setPhase('questioning')
+          return
+        }
+
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: text,
+            systemPrompt: systemPromptRef.current,
+          }),
+        })
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          addMessage({ role: 'assistant', type: 'text', text: `Erro: ${errData.error || 'tente novamente.'}` })
+          setPhase('responding')
+          return
+        }
+
+        const data = await res.json()
+        const { chat, prompt } = parseAIResponse(data.response || '')
+
+        addMessage({ role: 'assistant', type: 'video_desc', text: chat })
+
+        if (prompt) {
+          setPhase('generating')
+          addMessage({ role: 'assistant', type: 'generating', text: 'Gerando seu vídeo...' })
+          generateVideoWithPrompt(prompt)
         } else {
-          const prompt = buildVideoPrompt(text, [])
-          addMessage({
-            role: 'assistant',
-            type: 'video_desc',
-            text: `Perfeito! Vou criar seu vídeo agora.\n\n📹 **O que vou fazer:**\n${text}\n\n⏳ **Detalhes do vídeo:**\n- Proporção: 9:16 (TikTok)\n- Estilo: Realista\n- Duração: 30 segundos\n- Tom: Profissional\n\n🎬 **Prompt gerado:**\n${prompt.substring(0, 200)}...`,
-          })
-          setTimeout(() => {
-            setPhase('generating')
-            addMessage({ role: 'assistant', type: 'generating', text: 'Gerando seu vídeo...' })
-          }, 800)
+          setPhase('responding')
         }
       } else {
-        const response = generateResponse(text)
-        addMessage({ role: 'assistant', type: 'text', text: response })
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: text,
+            systemPrompt: systemPromptRef.current,
+          }),
+        })
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          addMessage({ role: 'assistant', type: 'text', text: `Erro: ${errData.error || 'tente novamente.'}` })
+          setPhase('responding')
+          return
+        }
+
+        const data = await res.json()
+        addMessage({ role: 'assistant', type: 'text', text: data.response || 'Desculpe, não entendi. Pode reformular?' })
         setPhase('responding')
       }
-    }, 1500)
+    } catch (err: any) {
+      addMessage({ role: 'assistant', type: 'text', text: `Erro de conexão: ${err.message}` })
+      setPhase('responding')
+    }
+  }
+
+  async function generateVideoWithPrompt(videoPrompt: string) {
+    try {
+      const res = await fetch('/api/generate-video', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: videoPrompt }),
+      })
+
+      if (res.status === 503) {
+        const errData = await res.json().catch(() => ({}))
+        if (errData.loading) {
+          addMessage({ role: 'assistant', type: 'text', text: 'O modelo de vídeo está carregando. Tentando novamente em alguns segundos...' })
+          setTimeout(() => generateVideoWithPrompt(videoPrompt), 5000)
+          return
+        }
+        addMessage({ role: 'assistant', type: 'text', text: `Erro: ${errData.error || 'Serviço indisponível'}` })
+        setPhase('responding')
+        return
+      }
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        addMessage({ role: 'assistant', type: 'text', text: `Falha ao gerar vídeo: ${errData.error || 'tente novamente.'}` })
+        setPhase('responding')
+        return
+      }
+
+      const data = await res.json()
+      if (data.videoUrl) {
+        setGeneratedVideo(data.videoUrl)
+        setMessages((prev) => prev.map((m) =>
+          m.type === 'generating' ? { ...m, text: 'Vídeo gerado com sucesso!' } : m
+        ))
+        setPhase('responding')
+      }
+    } catch (err: any) {
+      addMessage({ role: 'assistant', type: 'text', text: `Erro ao gerar vídeo: ${err.message}` })
+      setPhase('responding')
+    }
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -200,41 +262,55 @@ export default function CreateVideoPage() {
     }
   }
 
-  function handleAnswer(questionId: string, option: string) {
-    setQuestions((prev) =>
-      prev.map((q) => (q.id === questionId ? { ...q, answer: option } : q))
-    )
-
+  async function handleAnswer(questionId: string, option: string) {
     const updated = questions.map((q) =>
       q.id === questionId ? { ...q, answer: option } : q
     )
-    const allAnswered = updated.every((q) => q.answer !== null)
+    setQuestions(updated)
+
     const answeredCount = updated.filter((q) => q.answer !== null).length
 
     if (answeredCount < updated.length) {
       setCurrentQuestionIdx(answeredCount)
+      return
     }
 
-    if (allAnswered) {
-      const text = input
-      const prompt = buildVideoPrompt(text, updated)
+    setPhase('thinking')
 
-      addMessage({
-        role: 'system',
-        type: 'text',
-        text: `Informações definidas!`,
+    const context = `PEDIDO DO USUÁRIO: ${input}\n\nDETALHES FORNECIDOS:\n${updated.map((q) => `- ${q.text}: ${q.answer}`).join('\n')}`
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: context,
+          systemPrompt: systemPromptRef.current,
+        }),
       })
 
-      addMessage({
-        role: 'assistant',
-        type: 'video_desc',
-        text: `Perfeito! Com todas as informações vou criar seu vídeo agora.\n\n📹 **O que vou fazer:**\n${text}\n\n⏳ **Detalhes do vídeo:**\n${updated.map((q) => `- ${q.text} ${q.answer}`).join('\n')}\n\n🎬 **Prompt gerado:**\n${prompt.substring(0, 200)}...`,
-      })
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        addMessage({ role: 'assistant', type: 'text', text: `Erro: ${errData.error || 'tente novamente.'}` })
+        setPhase('responding')
+        return
+      }
 
-      setTimeout(() => {
+      const data = await res.json()
+      const { chat, prompt } = parseAIResponse(data.response || '')
+
+      addMessage({ role: 'assistant', type: 'video_desc', text: chat })
+
+      if (prompt) {
         setPhase('generating')
         addMessage({ role: 'assistant', type: 'generating', text: 'Gerando seu vídeo...' })
-      }, 800)
+        generateVideoWithPrompt(prompt)
+      } else {
+        setPhase('responding')
+      }
+    } catch (err: any) {
+      addMessage({ role: 'assistant', type: 'text', text: `Erro de conexão: ${err.message}` })
+      setPhase('responding')
     }
   }
 
@@ -354,13 +430,19 @@ export default function CreateVideoPage() {
               {phase === 'generating' && (
                 <div className="cv-generating-area">
                   <div className="vid-frame" style={{ maxWidth: 280 }}>
-                    <div className="vid-frame-bg">
-                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1"><polygon points="5 3 19 12 5 21 5 3" /></svg>
-                    </div>
-                    <div className="vid-generating-overlay">
-                      <div className="generating-spinner" />
-                      <span className="generating-text">Gerando vídeo...</span>
-                    </div>
+                    {generatedVideo ? (
+                      <video src={generatedVideo} controls autoPlay loop style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />
+                    ) : (
+                      <>
+                        <div className="vid-frame-bg">
+                          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                        </div>
+                        <div className="vid-generating-overlay">
+                          <div className="generating-spinner" />
+                          <span className="generating-text">Gerando vídeo...</span>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               )}
