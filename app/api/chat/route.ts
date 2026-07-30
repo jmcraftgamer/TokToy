@@ -1,29 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const HF_TOKEN = process.env.HUGGINGFACE_TOKEN
-const HF_API = 'https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3'
+const HF_API = 'https://router.huggingface.co/v1/chat/completions'
 
 export async function POST(req: NextRequest) {
   try {
-    const { message, history, systemPrompt } = await req.json()
+    if (!HF_TOKEN) {
+      return NextResponse.json({ error: 'HUGGINGFACE_TOKEN não configurado no .env.local' }, { status: 500 })
+    }
 
-    if (!message && (!history || history.length === 0)) {
+    const { message, systemPrompt } = await req.json()
+
+    if (!message) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
     }
 
-    let formattedPrompt = ''
+    const messages: any[] = []
     if (systemPrompt) {
-      formattedPrompt = `<s>[INST] ${systemPrompt}\n\n---\n\n${message} [/INST]`
-    } else if (history && history.length > 0) {
-      const historyStr = history.map((m: any) => {
-        if (m.role === 'user') return `<s>[INST] ${m.content} [/INST]>`
-        if (m.role === 'assistant') return `${m.content}</s>`
-        return ''
-      }).join('')
-      formattedPrompt = `${historyStr}<s>[INST] ${message} [/INST]`
-    } else {
-      formattedPrompt = `<s>[INST] ${message} [/INST]`
+      messages.push({ role: 'system', content: systemPrompt })
     }
+    messages.push({ role: 'user', content: message })
 
     const response = await fetch(HF_API, {
       method: 'POST',
@@ -32,14 +28,11 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        inputs: formattedPrompt,
-        parameters: {
-          max_new_tokens: 600,
-          temperature: 0.7,
-          top_p: 0.95,
-          do_sample: true,
-          return_full_text: false,
-        },
+        model: 'meta-llama/Llama-3.1-8B-Instruct',
+        messages,
+        max_tokens: 600,
+        temperature: 0.7,
+        top_p: 0.95,
       }),
     })
 
@@ -52,7 +45,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json()
-    const generatedText = Array.isArray(data) ? data[0]?.generated_text || '' : data.generated_text || ''
+    const generatedText = data?.choices?.[0]?.message?.content || ''
 
     return NextResponse.json({ response: generatedText.trim() })
   } catch (error: any) {

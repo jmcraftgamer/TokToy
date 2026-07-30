@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const HF_TOKEN = process.env.HUGGINGFACE_TOKEN
-const HF_API = 'https://api-inference.huggingface.co/models/cerspense/zeroscope_v2_576w'
+const HF_API = 'https://router.huggingface.co/hf-inference/models/cerspense/zeroscope_v2_576w'
 
 export async function POST(req: NextRequest) {
   try {
+    if (!HF_TOKEN) {
+      return NextResponse.json({ error: 'HUGGINGFACE_TOKEN não configurado no .env.local' }, { status: 500 })
+    }
+
     const { prompt } = await req.json()
 
     if (!prompt || typeof prompt !== 'string') {
@@ -24,7 +28,7 @@ export async function POST(req: NextRequest) {
       const text = await response.text()
       const loading = text.toLowerCase().includes('loading')
       return NextResponse.json(
-        { error: loading ? 'O modelo de vídeo está carregando. Tentando novamente...' : 'Serviço indisponível no momento.', loading },
+        { error: loading ? 'Modelo de vídeo carregando. Tente novamente em alguns segundos.' : 'Serviço indisponível.', loading },
         { status: 503 }
       )
     }
@@ -32,7 +36,7 @@ export async function POST(req: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text()
       return NextResponse.json(
-        { error: `Erro na geração de vídeo: ${response.status}` },
+        { error: `A geração de vídeo por IA não está disponível no seu plano atual da HuggingFace. Tente novamente mais tarde ou configure um provedor pago.` },
         { status: response.status }
       )
     }
@@ -44,8 +48,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ videoUrl })
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
+      { error: 'Geração de vídeo temporariamente indisponível. A API da HuggingFace não suporta vídeos no plano gratuito atual.' },
+      { status: 503 }
     )
   }
 }
