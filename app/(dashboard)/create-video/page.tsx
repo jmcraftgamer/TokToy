@@ -14,22 +14,6 @@ const mockVideos = [
   { name: 'Unboxing Produto Y', duration: '1:00', date: '3 dias' },
 ]
 
-function RefBlock() {
-  return (
-    <div className="cv-ref-block">
-      <div className="ref-icon-area">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-          <circle cx="8.5" cy="8.5" r="1.5" />
-          <polyline points="21 15 16 10 5 21" />
-        </svg>
-        <span className="ref-badge">+</span>
-      </div>
-      <span className="ref-label">Referências</span>
-    </div>
-  )
-}
-
 function Avatar({ name }: { name: string }) {
   return (
     <div className="msg-avatar">{name.charAt(0).toUpperCase()}</div>
@@ -80,9 +64,19 @@ export default function CreateVideoPage() {
   }
 
   const inputArea = (ref: React.RefObject<HTMLDivElement>, source: 'initial' | 'split') => (
-    <div className="cv-chat-row">
-      <RefBlock />
-      <div className="cv-rect">
+    <div className="cv-rect unified">
+      <div className="cv-ref-block">
+        <div className="ref-icon-area">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+          <span className="ref-badge">+</span>
+        </div>
+        <span className="ref-label">Referências</span>
+      </div>
+      <div className="cv-rect-body">
         <div
           ref={ref}
           className="cv-write-area"

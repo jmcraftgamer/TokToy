@@ -608,15 +608,15 @@ input::placeholder, textarea::placeholder {
   margin-top: 8px;
 }
 
-/* Chat row: references block + rectangle side by side */
-.cv-chat-row {
+/* Unified references + writing area container */
+.cv-rect.unified {
   display: flex;
-  align-items: stretch;
-  gap: 10px;
+  flex-direction: row;
+  padding: 0;
+  overflow: hidden;
 }
 
-/* References square block */
-.cv-ref-block {
+.cv-rect.unified .cv-ref-block {
   width: 100px;
   min-height: 140px;
   display: flex;
@@ -624,18 +624,24 @@ input::placeholder, textarea::placeholder {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #0d0d0d;
-  border-radius: 12px;
-  border: 1px solid #1a1a1a;
   cursor: pointer;
-  transition: all 0.2s;
   flex-shrink: 0;
   padding: 12px 8px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  border-right: 1px solid #1a1a1a;
 }
 
-.cv-ref-block:hover {
+.cv-rect.unified .cv-ref-block:hover {
   background: #111;
-  border-color: #2a2a2a;
+}
+
+.cv-rect-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .ref-icon-area {
@@ -824,6 +830,10 @@ input::placeholder, textarea::placeholder {
 }
 
 .cv-chat-compact .cv-rect {
+  min-height: 100px;
+}
+
+.cv-chat-compact .cv-rect.unified .cv-ref-block {
   min-height: 100px;
 }
 
